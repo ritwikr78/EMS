@@ -28,10 +28,10 @@ public class EmployeeService {
 
 	@Autowired
 	private ProjectService projectService;
-	
+
 	@Autowired
 	private DepartmentService departmentService;
-	
+
 	@Autowired
 	private PositionService positionService;
 
@@ -49,8 +49,7 @@ public class EmployeeService {
 	public Map<String, String> addEmployeeDetails(EmployeeDataInsertion emp) {
 		Departments departmentsById = departmentService.getDepartmentsById(emp.getDepartment_id());
 		Positions positionById = positionService.getPositionsById(emp.getPosition_id());
-		
-		
+
 		Employees employee = new Employees();
 		employee.setFirstName(emp.getFirstName());
 		employee.setLastName(emp.getLastName());
@@ -66,7 +65,7 @@ public class EmployeeService {
 		employee.setSalary(emp.getSalary());
 		employee.setPhoneNumber(emp.getPhoneNumber());
 		employee.setQualification(emp.getQualification());
-		
+
 		employeeRepo.save(employee);
 		Map<String, String> respMap = new HashMap<String, String>();
 		respMap.put("message", "Employee Added Successfully");
@@ -79,12 +78,15 @@ public class EmployeeService {
 
 		persistEmpDetails.setFirstName(emp.getFirstName());
 		persistEmpDetails.setLastName(emp.getLastName());
-		persistEmpDetails.setPassword(emp.getPassword());
 		persistEmpDetails.setEmail(emp.getEmail());
 		persistEmpDetails.setPhoneNumber(emp.getPhoneNumber());
 		persistEmpDetails.setDepartment(emp.getDepartment());
 		persistEmpDetails.setPosition(emp.getPosition());
 		persistEmpDetails.setSalary(emp.getSalary());
+		persistEmpDetails.setQualification(emp.getQualification());
+		persistEmpDetails.setDob(emp.getDob());
+		persistEmpDetails.setDateOfJoining(emp.getDateOfJoining());
+
 		employeeRepo.save(persistEmpDetails);
 		Map<String, String> respMap = new HashMap<String, String>();
 		respMap.put("message", "Employee Updated Successfully");
@@ -104,17 +106,15 @@ public class EmployeeService {
 
 	// Key : Emp Id, Value : Manager Id
 	// method to assign manager to an employee
-	public Map<String, String> addEmployeeManager(HashMap<Long, Long> empManagerMap) {
-		Long key = (Long) empManagerMap.keySet().toArray()[0];
-		Long value = empManagerMap.get(key);
+	public Map<String, String> addEmployeeManager(HashMap<String, Long> empManagerMap) {
+		Long empId = empManagerMap.get("empId");
+		Long mgrId = empManagerMap.get("mgrId");
 
-		Employees emp = getEmployeesDetailsById(key);
-		Employees mgr = null;
-
-		if (value != null)
-			mgr = getEmployeesDetailsById(value);
+		Employees emp = getEmployeesDetailsById(empId);
+		Employees mgr = getEmployeesDetailsById(mgrId);
 
 		emp.setEmployeeManagerId(mgr);
+
 		Map<String, String> respMap = new HashMap<String, String>();
 		respMap.put("message", "Manager added to employee successfully");
 		return respMap;
@@ -123,15 +123,12 @@ public class EmployeeService {
 
 	// Key : Emp Id, Value : Project Id
 	// method to assign Project to an employee
-	public Map<String, String> addEmployeeProject(HashMap<Long, Long> empProjectMap) {
-		Long key = (Long) empProjectMap.keySet().toArray()[0];
-		Long value = empProjectMap.get(key);
+	public Map<String, String> addEmployeeProject(HashMap<String, Long> empProjectMap) {
+		Long empId = empProjectMap.get("empId");
+		Long projectId = empProjectMap.get("projectId");
 
-		Employees emp = getEmployeesDetailsById(key);
-		Projects project = null;
-
-		if (value != null)
-			project = projectService.getProjectDetailsById(value);
+		Employees emp = getEmployeesDetailsById(empId);
+		Projects project = projectService.getProjectDetailsById(projectId);
 
 		emp.setProject(project);
 		Map<String, String> respMap = new HashMap<String, String>();

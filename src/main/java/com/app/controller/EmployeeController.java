@@ -62,7 +62,7 @@ public class EmployeeController {
 	}
 
 	@PostMapping("/addManager")
-	public ResponseEntity<?> addEmployeeManager(@RequestBody HashMap<Long, Long> empMgrMap) {
+	public ResponseEntity<?> addEmployeeManager(@RequestBody HashMap<String, Long> empMgrMap) {
 		return ResponseEntity.status(HttpStatus.OK).body(employeeService.addEmployeeManager(empMgrMap));
 	}
 
@@ -82,7 +82,7 @@ public class EmployeeController {
 	}
 
 	@PostMapping("/addProject")
-	public ResponseEntity<?> addEmployeeProject(@RequestBody @Valid HashMap<Long, Long> empProjectMap) {
+	public ResponseEntity<?> addEmployeeProject(@RequestBody @Valid HashMap<String, Long> empProjectMap) {
 		return ResponseEntity.status(HttpStatus.OK).body(employeeService.addEmployeeProject(empProjectMap));
 	}
 

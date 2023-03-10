@@ -36,7 +36,7 @@ public class Employees extends BaseEntity {
 	@Column(name = "last_name")
 	private String lastName;
 
-	@NotNull
+	@JsonIgnore
 	@Column(name = "password")
 	private String password;
 
