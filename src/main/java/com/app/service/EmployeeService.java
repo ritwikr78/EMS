@@ -9,6 +9,8 @@ import java.util.Map;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.app.dto.EmployeeDataInsertion;
@@ -35,6 +37,8 @@ public class EmployeeService {
 	@Autowired
 	private PositionService positionService;
 
+	private static final PasswordEncoder BCRYPT = new BCryptPasswordEncoder();
+
 	// method to get all employees
 	public List<Employees> getAllEmployeesDetails() {
 		return employeeRepo.findAll();
@@ -53,7 +57,7 @@ public class EmployeeService {
 		Employees employee = new Employees();
 		employee.setFirstName(emp.getFirstName());
 		employee.setLastName(emp.getLastName());
-		employee.setPassword("Password@123");
+		employee.setPassword(BCRYPT.encode("password@123"));
 		employee.setEmail(emp.getEmail());
 		employee.setDob(LocalDate.parse(emp.getDob(), DateTimeFormatter.ofPattern("d/MM/yyyy")));
 		employee.setDateOfJoining(LocalDate.parse(emp.getDob(), DateTimeFormatter.ofPattern("d/MM/yyyy")));
@@ -95,8 +99,14 @@ public class EmployeeService {
 	}
 
 	// method to authenticate employee
-	public Employees authenticateEmployee(String email, String password) {
-		return employeeRepo.findByEmailAndPassword(email, password);
+	public Employees authenticateEmployee(LoginRequest login) {
+		Employees emp = employeeRepo.findByEmail(login.getEmail());
+
+		if (BCRYPT.matches(login.getPassword(), emp.getPassword()))
+			return emp;
+
+		return null;
+
 	}
 
 	// method to find employee by email
@@ -166,12 +176,6 @@ public class EmployeeService {
 		return respMap;
 	}
 
-	// method to validate employee email & password
-	public Employees autheticateEmployee(LoginRequest login) {
-		return employeeRepo.findByEmailAndPassword(login.getEmail(), login.getPassword());
-
-	}
-
 	// method to change password
 	public Map<String, String> changePassword(HashMap<String, String> mapEmailPassword) {
 
@@ -185,7 +189,7 @@ public class EmployeeService {
 		if (password != null)
 
 			// change password
-			findByEmail.setPassword(password);
+			findByEmail.setPassword(BCRYPT.encode(password));
 		employeeRepo.save(findByEmail);
 
 		Map<String, String> respMap = new HashMap<String, String>();

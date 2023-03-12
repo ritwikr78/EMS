@@ -30,7 +30,7 @@ public class FirstController {
 	@PostMapping("/signin")
 	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest Login) {
 
-		Employees emp = employeeService.autheticateEmployee(Login);
+		Employees emp = employeeService.authenticateEmployee(Login);
 
 		if (emp != null)
 			return ResponseEntity.status(HttpStatus.OK).body(emp);
