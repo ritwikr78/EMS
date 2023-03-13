@@ -72,4 +72,8 @@ public class EmployeeAttendanceService {
 		return empAttendanceRepo.findAttendanceByManagerId(id, status);
 
 	}
+	public List<EmployeeAttendance> getAllAttendance() {
+		return empAttendanceRepo.findAll();
+
+	}
 }

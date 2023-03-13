@@ -10,6 +10,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,6 +28,7 @@ import com.app.entity.Employees;
 import com.app.service.EmployeeAttendanceService;
 import com.app.service.EmployeeService;
 
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/api/employee")
 public class EmployeeController {
@@ -42,7 +44,7 @@ public class EmployeeController {
 		return ResponseEntity.status(HttpStatus.OK).body(employeeService.getAllEmployeesDetails());
 	}
 
-	@PostMapping
+	@PostMapping("/add")
 	public ResponseEntity<?> addEmployee(@RequestBody EmployeeDataInsertion emp) {
 
 		Employees empFoundInRecords = null;
@@ -93,7 +95,7 @@ public class EmployeeController {
 		empAttendance.setEmployeeId(employeeService.getEmployeesDetailsById(attendance.getEmployeeId()));
 
 		// parse date
-		empAttendance.setDate(LocalDate.parse(attendance.getDate(), DateTimeFormatter.ofPattern("d/MM/yyyy")));
+		empAttendance.setDate(LocalDate.parse(attendance.getDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 
 		// parse InTime
 		String inTime = empAttendance.getDate() + " " + attendance.getInTime();
@@ -134,6 +136,10 @@ public class EmployeeController {
 	public ResponseEntity<?> showAttendanceByType(@PathVariable Long id, @PathVariable ApprovalStatus status) {
 		return ResponseEntity.status(HttpStatus.OK)
 				.body(empAttendanceService.getPendingAttendanceListByManagerId(id, status));
+	}
+	@GetMapping("/showAllAttendance")
+	public ResponseEntity<?> getAllAttendance() {
+		return ResponseEntity.status(HttpStatus.OK).body(empAttendanceService.getAllAttendance());
 	}
 
 }

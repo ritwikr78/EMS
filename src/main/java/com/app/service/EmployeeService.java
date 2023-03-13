@@ -59,8 +59,8 @@ public class EmployeeService {
 		employee.setLastName(emp.getLastName());
 		employee.setPassword(BCRYPT.encode("password@123"));
 		employee.setEmail(emp.getEmail());
-		employee.setDob(LocalDate.parse(emp.getDob(), DateTimeFormatter.ofPattern("d/MM/yyyy")));
-		employee.setDateOfJoining(LocalDate.parse(emp.getDob(), DateTimeFormatter.ofPattern("d/MM/yyyy")));
+		employee.setDob(LocalDate.parse(emp.getDob()));
+		employee.setDateOfJoining(LocalDate.parse(emp.getDob(), DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 		employee.setDepartment(departmentsById);
 		employee.setPosition(positionById);
 		employee.setAddress(emp.getAddress());

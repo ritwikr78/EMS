@@ -72,8 +72,12 @@ public class Employees extends BaseEntity {
 	@Column(name = "dob")
 	private LocalDate dob;
 
-	@Embedded
-	private Address address;
+	@NotNull
+	@Column(name = "address")
+	private String address;
+	
+//	@Embedded
+//	private Address address;
 
 	@NotNull
 	@Column(name = "gender")

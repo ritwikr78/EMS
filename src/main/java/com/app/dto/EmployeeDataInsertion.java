@@ -21,7 +21,7 @@ public class EmployeeDataInsertion {
 	private Double salary;
 	private Boolean isActive;
 	private String dob;
-	private Address address;
+	private String address;
 	private Gender gender;
 	private String qualification;
 	private String dateOfJoining;
